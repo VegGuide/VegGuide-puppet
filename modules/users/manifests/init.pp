@@ -1,4 +1,9 @@
 class users {
+    group { 'admin':
+        ensure => present,
+        system => true,
+    }
+
     group { 'autarch':
         ensure => present,
         gid    => 1000,
@@ -9,6 +14,7 @@ class users {
         comment    => 'Dave Rolsky',
         uid        => 1000,
         gid        => 'autarch',
+        groups     => [ 'admin' ],
         shell      => '/bin/bash',
         home       => '/home/autarch',
         managehome => true,
@@ -33,6 +39,7 @@ class users {
         comment    => 'John Thompson',
         uid        => 1001,
         gid        => 'johnt',
+        groups     => [ 'admin' ],
         shell      => '/bin/bash',
         home       => '/home/johnt',
         managehome => true,
