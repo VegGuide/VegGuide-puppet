@@ -30,4 +30,19 @@ class perl {
         source   => $deb,
         require  => Exec["build-$version-deb"],
     }
+
+    file { [ '/root/.cpan', '/root/.cpan/CPAN' ]:
+        ensure => directory,
+    }
+
+    file { '/root/.cpan/MyConfig.pm':
+        ensure => file,
+        source => 'puppet:///modules/perl/MyConfig.pm',
+    }
+
+    exec { 'install-cpanm':
+        command => "/opt/perl$version-no-threads/bin/cpan App::cpanminus",
+        require => File['/root/.cpan/MyConfig.pm'],
+        creates => "/opt/perl$version-no-threads/bin/cpanm",
+    }
 }
