@@ -1,8 +1,11 @@
 class perl {
+    include perl::imagemagick
+
     $version = '5.14.4'
     $repo = 'modern-perl-deb'
     $repo_url = "git://git.urth.org/$repo"
     $deb = "/opt/$repo/perl-$version-no-threads_$version-1_amd64.deb"
+    $perl_dir = "/opt/perl$version-no-threads"
 
     package { 'git':
         ensure => installed,
@@ -41,8 +44,14 @@ class perl {
     }
 
     exec { 'install-cpanm':
-        command => "/opt/perl$version-no-threads/bin/cpan App::cpanminus",
+        command => "$perl_dir/bin/cpan App::cpanminus",
         require => File['/root/.cpan/MyConfig.pm'],
-        creates => "/opt/perl$version-no-threads/bin/cpanm",
+        creates => "$perl_dir/bin/cpanm",
+    }
+
+    exec { 'install-file-find-rule':
+        command => "$perl_dir/bin/cpanm File::Find::Rule",
+        creates => "$perl_dir/lib/site_perl/$version/File/Find/Rule.pm",
+        require => Exec['install-cpanm'],
     }
 }
