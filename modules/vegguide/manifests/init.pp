@@ -6,7 +6,7 @@ class vegguide {
     $perl_bin_dir = "${perl_base_dir}/bin"
     $perl_site_dir = "${perl_base_dir}/lib/site_perl/${perl::version::perl_version}"
 
-    $cpanm = "${perl_bin_dir}/cpanm --skip-satisfied"
+    $cpanm = "${perl_bin_dir}/cpanm --notest --skip-satisfied"
 
     $vg_dir = '/opt/VegGuide-site'
 
@@ -34,7 +34,7 @@ class vegguide {
     }
 
     exec { 'install-geoip':
-        command => "${cpanm} --notest Geo::IP",
+        command => "${cpanm} Geo::IP",
         creates => "${perl_site_dir}/x86_64-linux/Geo/IP.pm",
     }
 
@@ -44,13 +44,13 @@ class vegguide {
     }
 
     exec { 'install-catalyst':
-        command => "${cpanm} --notest https://cpan.metacpan.org/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90020.tar.gz",
+        command => "${cpanm} https://cpan.metacpan.org/authors/id/J/JJ/JJNAPIORK/Catalyst-Runtime-5.90020.tar.gz",
         creates => "${perl_site_dir}/Catalyst.pm",
         require => Exec['install-lwp-https'],
     }
 
     exec { 'install-catalyst-unicode-plugin':
-        command => "${cpanm} --notest https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz ",
+        command => "${cpanm} https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz ",
         creates => "${perl_site_dir}/Catalyst/Plugin/Unicode/Encoding.pm",
         require => Exec['install-catalyst'],
     }
