@@ -1,0 +1,33 @@
+#!/bin/bash
+
+old_server='208.90.20.206'
+services="mailman vegguide-starman"
+
+for s in $services ; do
+    service $s stop
+done
+
+for file in /etc/GeoIP.conf /etc/vegguide/ /var/lib/alzabo/ /etc/mailman/mm_cfg.py ; do
+    rsync -av $old_server:$file $file
+done
+
+for sslfile in /etc/ssl/certs/www.vegguide.org.crt /etc/ssl/private/www.vegguide.org.key /etc/ssl/certs/lists.vegguide.org.crt /etc/ssl/private/lists.vegguide.org.key ; do
+    rsync -av $old_server:$sslfile /etc/nginx/
+done
+
+for subdir in archives lists spam qfiles ; do
+    dir=/var/lib/mailman/$subdir
+    rsync -avz --delete $old_server:$dir/ $dir/
+done
+
+mkdir -p /var/lib/vegguide
+for subdir in entry skin user ; do
+    dir="/var/lib/vegguide/$subdir-images"
+    rsync -av --delete $old_server:$dir/ $dir/
+done
+
+ssh -C $old_server mysqldump --all-databases | mysql
+
+for s in $services ; do
+    service $s start
+done

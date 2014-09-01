@@ -10,12 +10,12 @@ if [[ $server == "" ]]; then
     exit 1
 fi
 
-if [[ ! -d $dir ]]; then
-    echo "$dir dir not found, run this script from one dir below the checkout"
+if [[ ! -f ./bootstrap-puppet ]]; then
+    echo "bootstrap-puppet not found, run this script from the checkout dir"
     exit 1
 fi
 
-rsync -av $dir/ root@$server:$dir/
+rsync -av ./ root@$server:$dir/
 ssh root@$server aptitude update
 ssh root@$server aptitude -y upgrade
 ssh root@$server aptitude -y install puppet

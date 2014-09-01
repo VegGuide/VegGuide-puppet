@@ -1,4 +1,5 @@
 class perl {
+    include perl::alzabo
     include perl::imagemagick
     include perl::version
 

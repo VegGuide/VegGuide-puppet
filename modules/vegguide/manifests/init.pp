@@ -1,6 +1,7 @@
 class vegguide {
     include perl
     include perl::version
+    include geoip
 
     $perl_base_dir = "/opt/perl${perl::version::perl_version}-no-threads"
     $perl_bin_dir = "${perl_base_dir}/bin"
@@ -11,6 +12,11 @@ class vegguide {
     $vg_dir = '/opt/VegGuide-site'
 
     Class['perl::imagemagick'] -> Class['vegguide']
+    Class['perl::alzabo'] -> Class['vegguide']
+
+    file { '/etc/nginx/sites-enabled/default':
+        ensure => absent,
+    }
 
     file { 'apply-puppet':
         ensure => file,
@@ -55,14 +61,25 @@ class vegguide {
         require => Exec['install-catalyst'],
     }
 
+    exec { 'install-locale-country':
+        command => "${perl_bin_dir}/cpanm --notest Locale::Country",
+    }
+
+    exec { 'install-catalyst-view-mason':
+        command => "${cpanm} Catalyst::View::Mason",
+        creates => "${perl_site_dir}/Catalyst/View/Mason.pm",
+    }
+
     exec { 'install-vg-prereqs':
         command => "${cpanm} `./Build modules`",
         cwd     => $vg_dir,
         timeout => 0,
+        creates => "${perl_site_dir}/XML/SAX/Writer.pm",
         require => [
             Exec['build-vg'],
             Exec['install-catalyst-unicode-plugin'],
             Exec['install-geoip'],
+            Exec['install-locale-country'],
             ],
     }
 
