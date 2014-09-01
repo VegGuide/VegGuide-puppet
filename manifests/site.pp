@@ -17,6 +17,7 @@ File {
 
 node default {
     include ferm
+    include hostname
     include monitoring
     include packages
     include timezone
