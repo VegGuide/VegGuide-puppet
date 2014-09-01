@@ -7,7 +7,12 @@ class packages {
     package { 'emacs23-nox': }
     package { 'libdb-dev': }
     package { 'libgdbm-dev': }
+    package { 'libgeoip-dev': }
+    package { 'libgmp-dev': }
+    package { 'libmagic-dev': }
     package { 'libmagickcore-dev': }
+    package { 'libmysqlclient-dev': }
+    package { 'libssl-dev': }
     package { 'mailman': }
     package { 'mysql-server': }
     package { 'nginx': }

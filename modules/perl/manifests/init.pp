@@ -1,7 +1,8 @@
 class perl {
     include perl::imagemagick
+    include perl::version
 
-    $version = '5.14.4'
+    $version = $perl::version::perl_version
     $repo = 'modern-perl-deb'
     $repo_url = "git://git.urth.org/$repo"
     $deb = "/opt/$repo/perl-$version-no-threads_$version-1_amd64.deb"
@@ -22,7 +23,7 @@ class perl {
     exec { "build-$version-deb":
         command => 'debuild -i -us -uc -b',
         cwd     => "/opt/$repo/perl-$version",
-        timeout => 1800,
+        timeout => 0,
         creates => $deb,
         require => [ Class['packages'], Vcsrepo[$repo], ],
     }
@@ -45,7 +46,7 @@ class perl {
 
     exec { 'install-cpanm':
         command => "$perl_dir/bin/cpan App::cpanminus",
-        require => File['/root/.cpan/MyConfig.pm'],
+        require => [ File['/root/.cpan/MyConfig.pm'], Package["perl-$version-no-threads"], ],
         creates => "$perl_dir/bin/cpanm",
     }
 

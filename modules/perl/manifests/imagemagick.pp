@@ -1,5 +1,7 @@
 class perl::imagemagick {
-    $perl_version = '5.14.4'
+    include perl::version
+
+    $perl_version = $perl::version::perl_version
     $im_version = '6.77'
     $im_dir = "/opt/PerlMagick-${im_version}"
 

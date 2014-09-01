@@ -1,0 +1,7 @@
+#!/bin/bash
+
+dir="$HOME/VegGuide-puppet"
+
+echo "Applying config at $dir"
+
+puppet apply --modulepath $dir/modules $dir/manifests/site.pp
