@@ -16,7 +16,11 @@ File {
 }
 
 node default {
+    include ferm
+    include monitoring
     include packages
     include users
     include vegguide
+
+    Class['ferm'] -> Class['monitoring'] -> Class['packages'] -> Class['vegguide']
 }

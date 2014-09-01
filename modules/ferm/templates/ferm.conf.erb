@@ -1,0 +1,41 @@
+table filter {
+    chain INPUT {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+
+        # allow local packages
+        interface lo ACCEPT;
+
+        # respond to ping
+        proto icmp ACCEPT;
+
+        # allow SSH connections
+        proto tcp dport ssh ACCEPT;
+
+        # allow web and smtp
+        proto tcp dport www ACCEPT;
+        proto tcp dport https ACCEPT;
+        proto tcp dport 444 ACCEPT;
+        proto tcp dport smtp ACCEPT;
+
+        # allow exploreveg to connect to nrpe
+        proto tcp dport 5666 saddr <%= scope.lookupvar('monitoring::monitoring_host') -%> ACCEPT;
+    }
+    chain OUTPUT {
+        policy ACCEPT;
+
+        # connection tracking
+        #mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+    chain FORWARD {
+        policy DROP;
+
+        # connection tracking
+        mod state state INVALID DROP;
+        mod state state (ESTABLISHED RELATED) ACCEPT;
+    }
+}
