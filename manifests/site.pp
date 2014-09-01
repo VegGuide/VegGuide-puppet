@@ -19,6 +19,7 @@ node default {
     include ferm
     include monitoring
     include packages
+    include timezone
     include users
     include vegguide
 
