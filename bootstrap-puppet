@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+server=$1
+dir='VegGuide-puppet'
+
+if [[ $server == "" ]]; then
+    echo "Usage: bootstrap-puppet <server>"
+    exit 1
+fi
+
+if [[ ! -d $dir ]]; then
+    echo "$dir dir not found, run this script from one dir below the checkout"
+    exit 1
+fi
+
+rsync -av $dir/ root@$server:$dir/
+ssh root@$server aptitude update
+ssh root@$server aptitude -y upgrade
+ssh root@$server aptitude -y install puppet
+ssh root@$server puppet apply --modulepath $dir/modules $dir/manifests/site.pp
+ssh root@$server reboot
+
+echo "Done bootstrapping $server, it's rebooting now."
