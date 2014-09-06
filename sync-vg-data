@@ -7,9 +7,11 @@ for s in $services ; do
     service $s stop
 done
 
-for file in /etc/GeoIP.conf /etc/vegguide/ /var/lib/alzabo/ /etc/mailman/mm_cfg.py ; do
+for file in /etc/GeoIP.conf /etc/vegguide/ /var/lib/alzabo/ /etc/mailman/mm_cfg.py /etc/aliases ; do
     rsync -av $old_server:$file $file
 done
+
+/usr/bin/newaliases
 
 for sslfile in /etc/ssl/certs/www.vegguide.org.crt /etc/ssl/private/www.vegguide.org.key /etc/ssl/certs/lists.vegguide.org.crt /etc/ssl/private/lists.vegguide.org.key ; do
     rsync -av $old_server:$sslfile /etc/nginx/
@@ -27,6 +29,8 @@ for subdir in entry skin user ; do
 done
 
 ssh -C $old_server mysqldump --all-databases | mysql
+
+/usr/bin/mysql_upgrade -f
 
 for s in $services ; do
     service $s start

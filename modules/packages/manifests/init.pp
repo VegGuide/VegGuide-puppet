@@ -17,4 +17,5 @@ class packages {
     package { 'mysql-server': }
     package { 'nginx': }
     package { 'postfix': }
+    package { 'fcgiwrap': }
 }
