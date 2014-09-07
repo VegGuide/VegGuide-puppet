@@ -55,8 +55,14 @@ class vegguide {
         require => Exec['install-lwp-https'],
     }
 
+    exec { 'install-catalyst-session':
+        command => "${cpanm} https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Session-0.37.tar.gz",
+        creates => "${perl_site_dir}/Catalyst/Plugin/Session.pm",
+        require => Exec['install-catalyst'],
+    }
+
     exec { 'install-catalyst-unicode-plugin':
-        command => "${cpanm} https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz ",
+        command => "${cpanm} https://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/Catalyst-Plugin-Unicode-Encoding-1.9.tar.gz",
         creates => "${perl_site_dir}/Catalyst/Plugin/Unicode/Encoding.pm",
         require => Exec['install-catalyst'],
     }
