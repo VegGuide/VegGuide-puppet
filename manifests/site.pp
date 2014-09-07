@@ -20,6 +20,7 @@ node default {
     include hostname
     include monitoring
     include packages
+    include ssh
     include timezone
     include users
     include vegguide
