@@ -1,6 +1,4 @@
-class ferm {
-    include monitoring
-
+class ferm ($monitoring_host) {
     package { 'ferm':
         ensure => installed,
     }

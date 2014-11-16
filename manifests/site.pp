@@ -16,7 +16,6 @@ File {
 }
 
 class common {
-    include ferm
     include packages
     include ssh
     include timezone
@@ -26,14 +25,19 @@ class common {
 
 node default {
     include common
+
     include hostname
     include monitoring
 
-    Class['ferm'] -> Class['monitoring'] -> Class['packages'] -> Class['vegguide']
+    class {'ferm':
+        monitoring_host => $monitoring::monitoring_host
+    } -> Class['monitoring'] -> Class['packages'] -> Class['vegguide']
 }
 
 node 'test.vegguide.org' {
     include common
 
-    Class['ferm'] -> Class['packages'] -> Class['vegguide']
+    class {'ferm':
+        monitoring_host => 'NONE'
+    } -> Class['packages'] -> Class['vegguide']
 }

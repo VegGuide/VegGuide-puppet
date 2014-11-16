@@ -21,8 +21,10 @@ table filter {
         proto tcp dport 444 ACCEPT;
         proto tcp dport smtp ACCEPT;
 
+<% if @monitoring_host != 'NONE' %>
         # allow exploreveg to connect to nrpe
-        proto tcp dport 5666 saddr <%= scope.lookupvar('monitoring::monitoring_host') -%> ACCEPT;
+        proto tcp dport 5666 saddr <%= @monitoring_host -%> ACCEPT;
+<% end %>
     }
     chain OUTPUT {
         policy ACCEPT;
