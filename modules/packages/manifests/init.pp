@@ -4,7 +4,7 @@ class packages {
     package { 'build-essential': }
     package { 'debhelper': }
     package { 'devscripts': }
-    package { 'emacs23-nox': }
+    package { 'emacs24-nox': }
     package { 'libdb-dev': }
     package { 'libgdbm-dev': }
     package { 'libgeoip-dev': }
