@@ -77,7 +77,6 @@ class vegguide {
         creates => "${perl_site_dir}/XML/SAX/Writer.pm",
         require => [
             Exec['build-vg'],
-            Exec['install-catalyst-unicode-plugin'],
             Exec['install-geoip'],
             Exec['install-locale-country'],
             ],
