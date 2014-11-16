@@ -10,11 +10,19 @@ class geoip {
         ensure => directory,
     }
 
+    package { 'geoip-bin':
+        ensure   => installed,
+        provider => apt,
+    }
+
     package { 'geoipupdate':
         ensure   => installed,
         provider => dpkg,
         source   => "/opt/$geoipupdate_deb",
-        require  => File["/opt/$geoipupdate_deb"],
+        require  => [
+            Package['geoip-bin'],
+            File["/opt/$geoipupdate_deb"],
+            ],
     }
 
     file { 'geoipupdate-cron':
