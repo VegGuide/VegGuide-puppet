@@ -15,15 +15,25 @@ File {
     mode  => 0644,
 }
 
-node default {
+class common {
     include ferm
-    include hostname
-    include monitoring
     include packages
     include ssh
     include timezone
     include users
     include vegguide
+}
+
+node default {
+    include common
+    include hostname
+    include monitoring
 
     Class['ferm'] -> Class['monitoring'] -> Class['packages'] -> Class['vegguide']
+}
+
+node 'test.vegguide.org' {
+    include common
+
+    Class['ferm'] -> Class['packages'] -> Class['vegguide']
 }
